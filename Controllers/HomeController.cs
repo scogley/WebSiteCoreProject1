@@ -22,11 +22,42 @@ namespace WebSiteCoreProject1.Controllers
         {
             return View();
         }
-
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+        //todo: should I return an account created successfully page?
+        [HttpPost]
+        public IActionResult Register(Models.UserAccountViewModel userAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                return View("Index"); // just return to home page.
+            }
+            else
+            {
+                return View(); // return the current view with field validation.
+            }
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        //todo: create the view ClassList and a model
+        [HttpPost]
+        //public IActionResult Login(Models.UserAccountViewModel userAccount)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        return View("ClassList", userAccount);
+        //    }
+        //    else
+        //    {
+        //        return View();
+        //    }
+        //}
 
         public IActionResult Privacy()
         {
