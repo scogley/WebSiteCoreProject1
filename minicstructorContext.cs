@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+
 namespace WebSiteCoreProject1
 {
     public partial class minicstructorContext : DbContext
