@@ -30,13 +30,17 @@ namespace WebSiteCoreProject1.Controllers
         //todo: should I return an account created successfully page?
         [HttpPost]
         //public IActionResult Register(Models.UserAccountViewModel userAccount)
-        public IActionResult Register(Models.UserModel userAccount) 
+        public IActionResult Register(Models.UserModel userFormSubmission) 
         {
             if (ModelState.IsValid)
             {
                 var userDb = new minicstructorContext();
-                userDb.User.Add(userAccount);
-                userDb.SaveChanges(); // todo: fix this null error failing to insert
+                User userAcct = new User(); // Create a new user account object for adding to db
+                userAcct.UserEmail = userFormSubmission.UserEmail;
+                userAcct.UserPassword = userFormSubmission.UserPassword; // Add just the one validated password.
+                
+                userDb.User.Add(userAcct);
+                userDb.SaveChanges(); 
                 return View("Index"); // just return to home page.
             }
             else
