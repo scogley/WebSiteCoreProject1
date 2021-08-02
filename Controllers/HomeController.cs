@@ -72,7 +72,10 @@ namespace WebSiteCoreProject1.Controllers
                 }
                 if (userEmailMatch && userPasswordMatch)
                 {
-                    // DO SOMETHING LIKE SET A SESSION VARIABLE?
+                    // TODO: DO SOMETHING LIKE SET A SESSION VARIABLE?
+                    // Create the LoggedIn session variable
+                    // see this example for how to use session state in aspnetcore https://www.c-sharpcorner.com/article/how-to-use-session-in-asp-net-core/#:~:text=How%20To%20Use%20Sessions%20In%20ASP.NET%20Core%201,double%20click%20%E2%80%9DStartup.cs%E2%80%9D%20to%20configure%20the%20services.%20
+                    // then check the variable in layout and use something like @Html.Action("IncrementCount")
                     return View();
                 }
                 else
