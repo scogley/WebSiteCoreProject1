@@ -34,9 +34,9 @@ namespace WebSiteCoreProject1.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userDb = new minicstructorContext();
-                userDb.User.Add(userFormSubmission);
-                userDb.SaveChanges(); 
+                var database = new minicstructorContext();
+                database.User.Add(userFormSubmission);
+                database.SaveChanges(); 
                 return View("Index"); // just return to home page.
             }
             else
@@ -72,21 +72,8 @@ namespace WebSiteCoreProject1.Controllers
                 }
                 if (userEmailMatch && userPasswordMatch)
                 {
-
-                    //var classList = new ClassModel[] { };
-                    List<ClassModel> classList = new List<ClassModel> {};
-                    foreach (var c in database.Class)
-                    {
-                        var cmodel = new ClassModel();
-                        cmodel.ClassDescription = c.ClassDescription;
-                        cmodel.ClassId = c.ClassId;
-                        cmodel.ClassName = c.ClassName;
-                        cmodel.ClassPrice = c.ClassPrice;
-
-                        classList.Add(cmodel);
-                    }
-
-                    return View("classList", classList);
+                    // DO SOMETHING LIKE SET A SESSION VARIABLE?
+                    return View();
                 }
                 else
                 {
@@ -99,7 +86,23 @@ namespace WebSiteCoreProject1.Controllers
             }
         }
 
-        
+        public IActionResult ClassList()
+        {
+            var database = new minicstructorContext();
+            List<ClassModel> classList = new List<ClassModel> { };
+            foreach (var c in database.Class)
+            {
+                var cmodel = new ClassModel();
+                cmodel.ClassDescription = c.ClassDescription;
+                cmodel.ClassId = c.ClassId;
+                cmodel.ClassName = c.ClassName;
+                cmodel.ClassPrice = c.ClassPrice;
+
+                classList.Add(cmodel);
+            }
+
+            return View("classList", classList);
+        }
 
         public IActionResult Privacy()
         {
