@@ -55,10 +55,10 @@ namespace WebSiteCoreProject1.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var userDb = new minicstructorContext();
+                var database = new minicstructorContext();
                 bool userEmailMatch = false;
                 bool userPasswordMatch = false;
-                foreach (var user in userDb.User)
+                foreach (var user in database.User)
                 {
                     if (user.UserEmail == userFormSubmission.UserEmail)
                     {
@@ -72,7 +72,21 @@ namespace WebSiteCoreProject1.Controllers
                 }
                 if (userEmailMatch && userPasswordMatch)
                 {
-                    return View("ClassList", userFormSubmission);
+
+                    //var classList = new ClassModel[] { };
+                    List<ClassModel> classList = new List<ClassModel> {};
+                    foreach (var c in database.Class)
+                    {
+                        var cmodel = new ClassModel();
+                        cmodel.ClassDescription = c.ClassDescription;
+                        cmodel.ClassId = c.ClassId;
+                        cmodel.ClassName = c.ClassName;
+                        cmodel.ClassPrice = c.ClassPrice;
+
+                        classList.Add(cmodel);
+                    }
+
+                    return View("classList", classList);
                 }
                 else
                 {
@@ -84,6 +98,8 @@ namespace WebSiteCoreProject1.Controllers
                 return View();
             }
         }
+
+        
 
         public IActionResult Privacy()
         {
