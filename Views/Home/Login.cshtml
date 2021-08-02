@@ -1,34 +1,31 @@
 ﻿@model WebSiteCoreProject1.Models.UserModel
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Login";
 }
 
-<h1>Register</h1>
+<h1>Login</h1>
 
-<h4>UserAccountViewModel</h4>
+<h4>UserModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Register">
+        <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserEmail" class="control-label"></label>
+                <label asp-for="UserEmail" class="control-label">Email</label>
                 <input asp-for="UserEmail" class="form-control" />
                 <span asp-validation-for="UserEmail" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="UserPassword" class="control-label"></label>
+                <label asp-for="UserPassword" class="control-label">Password</label>
                 <input asp-for="UserPassword" class="form-control" />
                 <span asp-validation-for="UserPassword" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="UserPasswordConfirmation" class="control-label">Confirm Password</label>
-                <input asp-for="UserPasswordConfirmation" class="form-control" />
-                <span asp-validation-for="UserPasswordConfirmation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Log in" class="btn btn-primary" />
             </div>
         </form>
     </div>

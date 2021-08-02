@@ -35,11 +35,7 @@ namespace WebSiteCoreProject1.Controllers
             if (ModelState.IsValid)
             {
                 var userDb = new minicstructorContext();
-                User userAcct = new User(); // Create a new user account object for adding to db
-                userAcct.UserEmail = userFormSubmission.UserEmail;
-                userAcct.UserPassword = userFormSubmission.UserPassword; // Add just the one validated password.
-                
-                userDb.User.Add(userAcct);
+                userDb.User.Add(userFormSubmission);
                 userDb.SaveChanges(); 
                 return View("Index"); // just return to home page.
             }
@@ -55,17 +51,17 @@ namespace WebSiteCoreProject1.Controllers
         }
         //todo: create the view ClassList and a model
         [HttpPost]
-        //public IActionResult Login(Models.UserAccountViewModel userAccount)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        return View("ClassList", userAccount);
-        //    }
-        //    else
-        //    {
-        //        return View();
-        //    }
-        //}
+        public IActionResult Login(Models.UserModel userFormSubmission)
+        {
+            if (ModelState.IsValid)
+            {
+                return View("ClassList", userFormSubmission);
+            }
+            else
+            {
+                return View();
+            }
+        }
 
         public IActionResult Privacy()
         {
