@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebSiteCoreProject1.Models
 {
-    public partial class UserModel : User 
+    public partial class UserModelRegister : User 
     {
         // Inherit from the User class and some additional attributes and non-mapped properties.
         // See validation attributes https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-5.0

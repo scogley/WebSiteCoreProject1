@@ -30,7 +30,7 @@ namespace WebSiteCoreProject1.Controllers
         //todo: should I return an account created successfully page?
         [HttpPost]
         //public IActionResult Register(Models.UserAccountViewModel userAccount)
-        public IActionResult Register(Models.UserModel userFormSubmission) 
+        public IActionResult Register(Models.UserModelLogin userFormSubmission) 
         {
             if (ModelState.IsValid)
             {
@@ -51,11 +51,33 @@ namespace WebSiteCoreProject1.Controllers
         }
         //todo: create the view ClassList and a model
         [HttpPost]
-        public IActionResult Login(Models.UserModel userFormSubmission)
-        {
+        public IActionResult Login(Models.UserModelLogin userFormSubmission)
+        {            
             if (ModelState.IsValid)
             {
-                return View("ClassList", userFormSubmission);
+                var userDb = new minicstructorContext();
+                bool userEmailMatch = false;
+                bool userPasswordMatch = false;
+                foreach (var user in userDb.User)
+                {
+                    if (user.UserEmail == userFormSubmission.UserEmail)
+                    {
+                        userEmailMatch = true;
+                        if (user.UserPassword == userFormSubmission.UserPassword)
+                        {
+                            userPasswordMatch = true;
+                            break;
+                        }
+                    }
+                }
+                if (userEmailMatch && userPasswordMatch)
+                {
+                    return View("ClassList", userFormSubmission);
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {

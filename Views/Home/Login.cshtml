@@ -1,4 +1,4 @@
-﻿@model WebSiteCoreProject1.Models.UserModel
+﻿@model WebSiteCoreProject1.Models.UserModelLogin
 
 @{
     ViewData["Title"] = "Login";
@@ -13,17 +13,15 @@
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserEmail" class="control-label">Email</label>
+                <label asp-for="UserEmail" class="control-label"></label>
                 <input asp-for="UserEmail" class="form-control" />
-                <span asp-validation-for="UserEmail" class="text-danger"></span>
+                <span asp-validation-for="UserEmail" class="text-danger">Email</span>
             </div>
-
             <div class="form-group">
-                <label asp-for="UserPassword" class="control-label">Password</label>
+                <label asp-for="UserPassword" class="control-label"></label>
                 <input asp-for="UserPassword" class="form-control" />
-                <span asp-validation-for="UserPassword" class="text-danger"></span>
+                <span asp-validation-for="UserPassword" class="text-danger">Password</span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Log in" class="btn btn-primary" />
             </div>
