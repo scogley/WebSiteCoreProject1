@@ -23,7 +23,12 @@ namespace WebSiteCoreProject1.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Name = HttpContext.Session.GetString(SessionName);
+            // Check wheter a user is logged in and redirect to login page if not.
+            if (HttpContext.Session.GetString(SessionName) == null )
+            {
+                Response.Redirect("/Home/Login");
+            }
+            ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
             return View();
         }
         [HttpGet]
@@ -31,7 +36,6 @@ namespace WebSiteCoreProject1.Controllers
         {
             return View();
         }
-        //todo: should I return an account created successfully page?
         [HttpPost]
         //public IActionResult Register(Models.UserAccountViewModel userAccount)
         public IActionResult Register(Models.UserModelLogin userFormSubmission) 
@@ -51,9 +55,14 @@ namespace WebSiteCoreProject1.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // Check whether a user is logged in and redirect to home page
+            //if (HttpContext.Session.GetString(SessionName) != null)
+            //{
+            //    Response.Redirect("/");
+            //}
             return View();
         }
-        //todo: create the view ClassList and a model
+
         [HttpPost]
         public IActionResult Login(Models.UserModelLogin userFormSubmission)
         {            
