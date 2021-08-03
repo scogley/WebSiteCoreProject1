@@ -41,7 +41,7 @@ namespace WebSiteCoreProject1.Controllers
                 var database = new minicstructorContext();
                 database.User.Add(userFormSubmission);
                 database.SaveChanges(); 
-                return View("Index"); // just return to home page.
+                return View("Login"); // Go to login page.
             }
             else
             {
@@ -94,10 +94,17 @@ namespace WebSiteCoreProject1.Controllers
             return View("classList", classList);
         }
 
-        public IActionResult Privacy()
+        public IActionResult EnrollInClass()
         {
             return View();
         }
+
+        public IActionResult StudentClasses()
+        {
+            return View();
+        }
+
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
