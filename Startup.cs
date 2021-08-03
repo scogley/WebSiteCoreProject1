@@ -22,6 +22,19 @@ namespace WebSiteCoreProject1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region session provider
+            // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
+            // Set the in-memory session provider
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            #endregion
+
             services.AddControllersWithViews();
         }
 
@@ -41,6 +54,10 @@ namespace WebSiteCoreProject1
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // The order of middleware is important. Call UseSession after UseRouting and before UseEndpoints. 
+            // See Middleware Ordering https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-5.0#order
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

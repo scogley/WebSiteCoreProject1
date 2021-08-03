@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebSiteCoreProject1.Models;
+using Microsoft.AspNetCore.Http; // used for sessions
 
 namespace WebSiteCoreProject1.Controllers
 {
