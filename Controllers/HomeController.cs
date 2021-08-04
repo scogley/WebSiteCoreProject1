@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebSiteCoreProject1.Models;
 using Microsoft.AspNetCore.Http; // used for sessions
+using Microsoft.AspNetCore.Mvc.Rendering; // For SelectListItem
 
 namespace WebSiteCoreProject1.Controllers
 {
@@ -94,10 +95,14 @@ namespace WebSiteCoreProject1.Controllers
         public IActionResult EnrollInClass()
         {
             EnrollInClassModel enrollModel = new EnrollInClassModel();
+            
             var database = new minicstructorContext();
+            
             foreach (var c in database.Class)
             {
                 enrollModel.ClassNameList.Add(c.ClassName);
+                enrollModel.ClassNameSelItemList.Add(
+                    new SelectListItem { Text = c.ClassName, Value = c.ClassName });
             }
 
             return View("enrollinclass", enrollModel);
