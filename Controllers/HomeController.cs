@@ -100,7 +100,6 @@ namespace WebSiteCoreProject1.Controllers
             
             foreach (var c in database.Class)
             {
-                enrollModel.ClassNameList.Add(c.ClassName);
                 enrollModel.ClassNameSelItemList.Add(
                     new SelectListItem { Text = c.ClassName, Value = c.ClassName });
             }

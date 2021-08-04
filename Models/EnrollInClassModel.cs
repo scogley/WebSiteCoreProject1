@@ -8,12 +8,10 @@ namespace WebSiteCoreProject1.Models
 {
     public class EnrollInClassModel
     {
-        public List<string> ClassNameList { get; set; }
         public List<SelectListItem> ClassNameSelItemList { get; set; }
 
         public EnrollInClassModel()
         {
-            ClassNameList = new List<string>();
             ClassNameSelItemList = new List<SelectListItem>();
         }
     }
