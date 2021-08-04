@@ -1,0 +1,41 @@
+﻿@model WebSiteCoreProject1.Models.EnrollInClassModel
+
+@{
+    ViewData["Title"] = "EnrollInClass";
+}
+
+<h1>EnrollInClass</h1>
+
+<h4>EnrollInClassModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EnrollInClass">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+Will Attend: @Html.DropDownListFor(t => t.WillAttend, new[]
+{
+new SelectListItem { Text="Yes, I'll be there", Value=bool.TrueString},
+new SelectListItem{Text="No, I can't come", Value=bool.FalseString},
+}, "Choose an option")
+
+
+@*this works for showing the first class!!!!*@
+Choose Class: @Html.DropDownListFor(c => c.ClassNameList, new[]
+{
+new SelectListItem { Text=Model.ClassNameList[0].ToString(), Value=Model.ClassNameList.ToString()},
+new SelectListItem{Text="No, I can't come", Value=bool.FalseString},
+}, "Choose an option")
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -87,6 +87,36 @@ namespace WebSiteCoreProject1.Controllers
 
         public IActionResult ClassList()
         {
+            List<ClassModel> classList = GetDbClassData();
+            return View("classList", classList);
+        }
+
+        public IActionResult EnrollInClass()
+        {
+            EnrollInClassModel enrollModel = new EnrollInClassModel();
+            var database = new minicstructorContext();
+            foreach (var c in database.Class)
+            {
+                enrollModel.ClassNameList.Add(c.ClassName);
+            }
+
+            return View("enrollinclass", enrollModel);
+        }
+
+        public IActionResult StudentClasses()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        private static List<ClassModel> GetDbClassData()
+        {
             var database = new minicstructorContext();
             List<ClassModel> classList = new List<ClassModel> { };
             foreach (var c in database.Class)
@@ -100,25 +130,7 @@ namespace WebSiteCoreProject1.Controllers
                 classList.Add(cmodel);
             }
 
-            return View("classList", classList);
-        }
-
-        public IActionResult EnrollInClass()
-        {
-            return View();
-        }
-
-        public IActionResult StudentClasses()
-        {
-            return View();
-        }
-
-        
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return classList;
         }
     }
 }
