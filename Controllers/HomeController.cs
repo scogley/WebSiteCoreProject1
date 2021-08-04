@@ -24,7 +24,7 @@ namespace WebSiteCoreProject1.Controllers
 
         public IActionResult Index()
         {
-            // Check wheter a user is logged in and redirect to login page if not.
+            // Check whether a user is logged in and redirect to login page if not.
             if (HttpContext.Session.GetString(SessionName) == null )
             {
                 Response.Redirect("/Home/Login");
@@ -92,8 +92,16 @@ namespace WebSiteCoreProject1.Controllers
             return View("classList", classList);
         }
 
+        
         public IActionResult EnrollInClass()
         {
+            // Check whether a user is logged in and redirect to login page if not.
+            if (HttpContext.Session.GetString(SessionName) == null)
+            {
+                Response.Redirect("/Home/Login");
+            }
+            ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
+
             EnrollInClassModel enrollModel = new EnrollInClassModel();
             
             var database = new minicstructorContext();
@@ -106,6 +114,8 @@ namespace WebSiteCoreProject1.Controllers
 
             return View("enrollinclass", enrollModel);
         }
+
+
 
         public IActionResult StudentClasses()
         {
