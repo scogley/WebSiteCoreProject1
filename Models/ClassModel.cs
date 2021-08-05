@@ -8,6 +8,5 @@ namespace WebSiteCoreProject1.Models
 {
     public class ClassModel : Class
     {
-        public bool? WillAttend { get; set; }
     }
 }
