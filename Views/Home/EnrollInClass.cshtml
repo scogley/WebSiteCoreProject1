@@ -11,15 +11,24 @@ Hello @ViewBag.Name
 
 
 
-@*This works and shows all the classes!!!*@
-Choose Class: @Html.DropDownListFor(c => c.ClassNameSelItemList, 
-             Model.ClassNameSelItemList,"choose a class")
+
 
 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EnrollInClass">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ClassNameSelItemList" class="control-label"></label>
+                @*This works and shows all the classes!!!*@
+                @*Choose Class: @Html.DropDownListFor(c => c.ClassNameSelItemList,
+    Model.ClassNameSelItemList, "choose a class")*@
+
+                <label>Classes</label>
+                <select asp-for="ClassId" asp-items=@Model.ClassNameSelItemList>
+                    <option>Please select one</option>
+                </select>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Add Class" class="btn btn-primary" />
             </div>

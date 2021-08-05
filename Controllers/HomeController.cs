@@ -107,11 +107,12 @@ namespace WebSiteCoreProject1.Controllers
             EnrollInClassModel enrollModel = new EnrollInClassModel();
             
             var database = new minicstructorContext();
-            
+            // This works for setting ClassId in dropdown!
             foreach (var c in database.Class)
             {
                 enrollModel.ClassNameSelItemList.Add(
-                    new SelectListItem { Text = c.ClassName, Value = c.ClassName });
+                    new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
+                enrollModel.ClassId = c.ClassId;
             }
 
             return View("enrollinclass", enrollModel);
@@ -120,6 +121,8 @@ namespace WebSiteCoreProject1.Controllers
         [HttpPost]
         public IActionResult EnrollInClass(Models.EnrollInClassModel enrollClassForm)
         {
+            // enrollClassForm has ClassId property set!
+            // See this page for useful info implementing dropdown https://stackoverflow.com/questions/34624034/select-tag-helper-in-asp-net-core-mvc
             if (ModelState.IsValid)
             {
                 var database = new minicstructorContext();
@@ -136,6 +139,10 @@ namespace WebSiteCoreProject1.Controllers
                 // Get the user from db by looking up the logged in userId stored in Session variable.
                 var user = database.User
                     .Find(int.Parse(HttpContext.Session.GetString(SessionUserId)));
+
+                //var classId = database.Class
+                //    .Find(enrollClassForm.)
+
                 // this works to add to db
                 var userClassTable = new UserClass 
                 { 
