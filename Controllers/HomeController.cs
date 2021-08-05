@@ -129,30 +129,22 @@ namespace WebSiteCoreProject1.Controllers
 
                 // need to get the ClassId and the UserId to modify UserClass table
                 // Get the current session user id and query db table for the
-                // TODO: GET THIS WORKING!
-                //var userId = database.UserClass
-                //    .Select(u => new UserClass()
-                //    //).Where(u => u.UserId.ToString() == HttpContext.Session.GetString(SessionUserId));
-                //).Where(u => u.UserId.ToString() == "1002");
-
+                
 
                 // Get the user from db by looking up the logged in userId stored in Session variable.
-                var user = database.User
+                var user_db_result = database.User
                     .Find(int.Parse(HttpContext.Session.GetString(SessionUserId)));
 
-                //var classId = database.Class
-                //    .Find(enrollClassForm.)
+                var class_db_result = database.Class
+                    .Find(enrollClassForm.ClassId);
 
                 // this works to add to db
                 var userClassTable = new UserClass 
                 { 
-                    ClassId = 1,
-                    UserId = 2,
+                    ClassId = class_db_result.ClassId,
+                    UserId = user_db_result.UserId,
                 };
                 database.UserClass.Add(userClassTable);
-
-                
-                
                 database.SaveChanges();
                 return View("Login"); // Go to login page.
             }
