@@ -13,7 +13,8 @@ namespace WebSiteCoreProject1.Controllers
 {
     public class HomeController : Controller
     {
-        const string SessionName = "_Name";
+        private const string SessionName = "_Name";
+        private const string SessionUserId = "_UserId";
         
         private readonly ILogger<HomeController> _logger;
 
@@ -77,6 +78,7 @@ namespace WebSiteCoreProject1.Controllers
                         if (user.UserPassword == userFormSubmission.UserPassword)
                         {
                             HttpContext.Session.SetString(SessionName, user.UserEmail);
+                            HttpContext.Session.SetString(SessionUserId, user.UserId.ToString());
                             return View();
                         }
                     }
@@ -92,7 +94,7 @@ namespace WebSiteCoreProject1.Controllers
             return View("classList", classList);
         }
 
-        
+        [HttpGet]
         public IActionResult EnrollInClass()
         {
             // Check whether a user is logged in and redirect to login page if not.
@@ -115,6 +117,33 @@ namespace WebSiteCoreProject1.Controllers
             return View("enrollinclass", enrollModel);
         }
 
+        [HttpPost]
+        public IActionResult EnrollInClass(Models.EnrollInClassModel enrollClassForm)
+        {
+            if (ModelState.IsValid)
+            {
+                var database = new minicstructorContext();
+
+                // need to get the ClassId and the UserId to modify UserClass table
+                // Get the current session user id and query db table for the
+                // TODO: GET THIS WORKING!
+                var userId = database.UserClass
+                    .Select(u => new UserClass()
+                    //).Where(u => u.UserId.ToString() == HttpContext.Session.GetString(SessionUserId));
+                ).Where(u => u.UserId.ToString() == "1002");
+
+
+
+                database.UserClass.Add(enrollClassForm);
+                
+                database.SaveChanges();
+                return View("Login"); // Go to login page.
+            }
+            else
+            {
+                return View(); // return the current view with field validation.
+            }
+        }
 
 
         public IActionResult StudentClasses()
