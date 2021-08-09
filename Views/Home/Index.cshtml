@@ -1,24 +1,33 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    th {
+        text-align: left;
+    }
+</style>
+<div class="text-left">
+    <h1>The Learning Center</h1>
+    <p>The place for technology classes</a>.</p>
 </div>
-<div class="text-center">
+
+<div>
     <table>
         <tr>
             <th>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ClassList">Class List</a>
+                <h3><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ClassList">Class List</a></h3>
             </th>
             <th>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="StudentClasses">Your Enrolled Classes</a>
+                <h3><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="StudentClasses">Your Enrolled Classes</a></h3>
             </th>
             <th>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="EnrollInClass">Enroll in a class</a>
+                <h3><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="EnrollInClass">Enroll in a class</a></h3>
             </th>
+        </tr>
+        <tr>
+            <td class="align-content-lg-start">See all our class offerings</td>
+            <td class="align-content-lg-start">See the classes you are enrolled in</td>
+            <td class="align-content-lg-start">Take a new class</td>
         </tr>
     </table>
 </div>
