@@ -79,7 +79,9 @@ namespace WebSiteCoreProject1.Controllers
                         {
                             HttpContext.Session.SetString(SessionName, user.UserEmail);
                             HttpContext.Session.SetString(SessionUserId, user.UserId.ToString());
-                            return View();
+                            // TODO: ADD Claim and cookieAuth here
+
+                            return Redirect("~/"); // Successful logon redirects to home page
                         }
                     }
                 }
@@ -104,16 +106,7 @@ namespace WebSiteCoreProject1.Controllers
             }
             ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
 
-            EnrollInClassModel enrollModel = new EnrollInClassModel();
-            
-            var database = new minicstructorContext();
-            // This works for setting ClassId in dropdown!
-            foreach (var c in database.Class)
-            {
-                enrollModel.ClassNameSelItemList.Add(
-                    new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
-                enrollModel.ClassId = c.ClassId;
-            }
+            EnrollInClassModel enrollModel = EnrollInClassHelper();
 
             return View("enrollinclass", enrollModel);
         }
@@ -138,6 +131,17 @@ namespace WebSiteCoreProject1.Controllers
                 var class_db_result = database.Class
                     .Find(enrollClassForm.ClassId);
 
+                // Check if the user has already enrolled in this class
+                var user_enrolled_db_result = database.UserClass
+                    .Find(enrollClassForm.ClassId, int.Parse(HttpContext.Session.GetString(SessionUserId)));
+
+                if (user_enrolled_db_result != null)
+                {
+                    ModelState.AddModelError("", "Already enrolled in this class!");
+                    EnrollInClassModel enrollModel = EnrollInClassHelper();
+                    return View("enrollinclass", enrollModel);
+                }
+
                 // this works to add to db
                 var userClassTable = new UserClass 
                 { 
@@ -146,7 +150,7 @@ namespace WebSiteCoreProject1.Controllers
                 };
                 database.UserClass.Add(userClassTable);
                 database.SaveChanges();
-                return View("studentclasses"); // Go to login page.
+                return View("studentclasses"); // Go to list of enrolled classes page.
             }
             else
             {
@@ -154,6 +158,21 @@ namespace WebSiteCoreProject1.Controllers
             }
         }
 
+        private static EnrollInClassModel EnrollInClassHelper()
+        {
+            EnrollInClassModel enrollModel = new EnrollInClassModel();
+
+            var database = new minicstructorContext();
+            // This works for setting ClassId in dropdown!
+            foreach (var c in database.Class)
+            {
+                enrollModel.ClassNameSelItemList.Add(
+                    new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
+                enrollModel.ClassId = c.ClassId;
+            }
+
+            return enrollModel;
+        }
 
         //public IActionResult StudentClasses()
         //{
