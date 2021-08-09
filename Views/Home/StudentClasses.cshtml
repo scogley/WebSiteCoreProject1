@@ -4,7 +4,7 @@
     ViewData["Title"] = "StudentClasses";
 }
 
-<h1>StudentClasses</h1>
+<h1>Student Classes</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,17 +12,15 @@
 <table class="table">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.ClassId)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClassName)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClassDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClassPrice)
+                Paid
             </th>
             <th></th>
         </tr>
@@ -30,9 +28,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClassId)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.ClassName)
             </td>
@@ -41,11 +37,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClassPrice)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

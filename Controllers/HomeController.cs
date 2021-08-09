@@ -222,7 +222,7 @@ namespace WebSiteCoreProject1.Controllers
                 };
                 database.UserClass.Add(userClassTable);
                 database.SaveChanges();
-                return View("studentclasses"); // Go to list of enrolled classes page.
+                return Redirect("~/Home/studentclasses"); // Go to list of enrolled classes page.
             }
             else
             {
