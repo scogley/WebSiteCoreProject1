@@ -155,50 +155,50 @@ namespace WebSiteCoreProject1.Controllers
         }
 
 
-        public IActionResult StudentClasses()
-        {
-            List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));
-            return View("studentclasses", classList);
-        }
+        //public IActionResult StudentClasses()
+        //{
+        //    List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));
+        //    return View("studentclasses", classList);
+        //}
 
-        private List<ClassModel> GetDbUserClassData(int userId)
-        {
-            //TODO: FINISH THIS SECTION
-            //var database = new minicstructorContext();
+        //private List<ClassModel> GetDbUserClassData(int userId)
+        //{
+        //    //TODO: FINISH THIS SECTION
+        //    //var database = new minicstructorContext();
 
-            //// first query userClass for all claisId for userId
-            ////SELECT TOP(1000) [ClassId]
-            ////,[UserId]
-            ////FROM[mini - cstructor].[dbo].[UserClass]
-            ////where UserId = 2
+        //    // first query userClass for all claisId for userId
+        //    //SELECT TOP(1000) [ClassId]
+        //    //,[UserId]
+        //    //FROM[mini - cstructor].[dbo].[UserClass]
+        //    //where UserId = 2
 
-            //var userClass_db_result = database.UserClass
-            //    .Select(uc => new UserClass()
-            //    {
-            //        ClassId = uc.ClassId,
-            //        UserId = uc.UserId,
-            //    }).Where(uc => uc.UserId == userId).ToList();
+        //    var userClass_db_result = database.UserClass
+        //        .Select(uc => new UserClass()
+        //        {
+        //            ClassId = uc.ClassId,
+        //            UserId = uc.UserId,
+        //        }).Where(uc => uc.UserId == userId).ToList();
 
-            //List<ClassModel> classList = new List<ClassModel> { };
+        //    List<ClassModel> classList = new List<ClassModel> { };
 
-            //foreach (var res in userClass_db_result)
-            //{
-            //    var class_db_result = database.Class
-            //        .Select(c => new ClassModel()
-            //        {
-            //            ClassId = c.ClassId,
-            //            ClassDescription = c.ClassDescription,
-            //            ClassName = c.ClassName,
-            //            ClassPrice = c.ClassPrice,
-            //        }).Where(c => c.ClassId == res.ClassId);
-            //    classList.Add(class_db_result);
-            //}
-            
-            
-            
+        //    foreach (var res in userClass_db_result)
+        //    {
+        //        var class_db_result = database.Class
+        //            .Select(c => new ClassModel()
+        //            {
+        //                ClassId = c.ClassId,
+        //                ClassDescription = c.ClassDescription,
+        //                ClassName = c.ClassName,
+        //                ClassPrice = c.ClassPrice,
+        //            }).Where(c => c.ClassId == res.ClassId);
+        //        classList.Add(class_db_result);
+        //    }
 
-            //return classList;
-        }
+
+
+
+        //    return classList;
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
