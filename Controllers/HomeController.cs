@@ -90,10 +90,66 @@ namespace WebSiteCoreProject1.Controllers
             return View();
         }
 
+        public IActionResult StudentClasses()
+        {
+            List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));
+            return View("studentclasses", classList);
+        }
+
+        private List<ClassModel> GetDbUserClassData(int userId)
+        {
+            var database = new minicstructorContext();
+
+            // First query userClass for all classId for userId
+            var userClass_db_result = database.UserClass
+                .Select(uc => new UserClass()
+                {
+                    ClassId = uc.ClassId,
+                    UserId = uc.UserId,
+                }).Where(uc => uc.UserId == userId).ToList();
+
+            List<ClassModel> classList = new List<ClassModel> { };
+
+            // Then query Class for each classId in results.
+            foreach (var res in userClass_db_result)
+            {
+                var class_db_result = database.Class
+                    .Select(c => new ClassModel()
+                    {
+                        ClassId = c.ClassId,
+                        ClassDescription = c.ClassDescription,
+                        ClassName = c.ClassName,
+                        ClassPrice = c.ClassPrice,
+                    })
+                    .Where(c => c.ClassId == res.ClassId).ToList();
+                classList.Add(class_db_result[0]); // Only one result add it to the list.
+            }
+
+            return classList;
+        }
+
         public IActionResult ClassList()
         {
             List<ClassModel> classList = GetDbClassData();
             return View("classList", classList);
+        }
+
+        private static List<ClassModel> GetDbClassData()
+        {
+            var database = new minicstructorContext();
+            List<ClassModel> classList = new List<ClassModel> { };
+            foreach (var c in database.Class)
+            {
+                var cmodel = new ClassModel();
+                cmodel.ClassDescription = c.ClassDescription;
+                cmodel.ClassId = c.ClassId;
+                cmodel.ClassName = c.ClassName;
+                cmodel.ClassPrice = c.ClassPrice;
+
+                classList.Add(cmodel);
+            }
+
+            return classList;
         }
 
         [HttpGet]
@@ -109,6 +165,22 @@ namespace WebSiteCoreProject1.Controllers
             EnrollInClassModel enrollModel = EnrollInClassHelper();
 
             return View("enrollinclass", enrollModel);
+        }
+
+        private static EnrollInClassModel EnrollInClassHelper()
+        {
+            EnrollInClassModel enrollModel = new EnrollInClassModel();
+
+            var database = new minicstructorContext();
+            // This works for setting ClassId in dropdown!
+            foreach (var c in database.Class)
+            {
+                enrollModel.ClassNameSelItemList.Add(
+                    new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
+                enrollModel.ClassId = c.ClassId;
+            }
+
+            return enrollModel;
         }
 
         [HttpPost]
@@ -158,66 +230,9 @@ namespace WebSiteCoreProject1.Controllers
             }
         }
 
-        private static EnrollInClassModel EnrollInClassHelper()
-        {
-            EnrollInClassModel enrollModel = new EnrollInClassModel();
+        
 
-            var database = new minicstructorContext();
-            // This works for setting ClassId in dropdown!
-            foreach (var c in database.Class)
-            {
-                enrollModel.ClassNameSelItemList.Add(
-                    new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
-                enrollModel.ClassId = c.ClassId;
-            }
-
-            return enrollModel;
-        }
-
-        //public IActionResult StudentClasses()
-        //{
-        //    List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));
-        //    return View("studentclasses", classList);
-        //}
-
-        //private List<ClassModel> GetDbUserClassData(int userId)
-        //{
-        //    //TODO: FINISH THIS SECTION
-        //    //var database = new minicstructorContext();
-
-        //    // first query userClass for all claisId for userId
-        //    //SELECT TOP(1000) [ClassId]
-        //    //,[UserId]
-        //    //FROM[mini - cstructor].[dbo].[UserClass]
-        //    //where UserId = 2
-
-        //    var userClass_db_result = database.UserClass
-        //        .Select(uc => new UserClass()
-        //        {
-        //            ClassId = uc.ClassId,
-        //            UserId = uc.UserId,
-        //        }).Where(uc => uc.UserId == userId).ToList();
-
-        //    List<ClassModel> classList = new List<ClassModel> { };
-
-        //    foreach (var res in userClass_db_result)
-        //    {
-        //        var class_db_result = database.Class
-        //            .Select(c => new ClassModel()
-        //            {
-        //                ClassId = c.ClassId,
-        //                ClassDescription = c.ClassDescription,
-        //                ClassName = c.ClassName,
-        //                ClassPrice = c.ClassPrice,
-        //            }).Where(c => c.ClassId == res.ClassId);
-        //        classList.Add(class_db_result);
-        //    }
-
-
-
-
-        //    return classList;
-        //}
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -226,22 +241,6 @@ namespace WebSiteCoreProject1.Controllers
         }
 
 
-        private static List<ClassModel> GetDbClassData()
-        {
-            var database = new minicstructorContext();
-            List<ClassModel> classList = new List<ClassModel> { };
-            foreach (var c in database.Class)
-            {
-                var cmodel = new ClassModel();
-                cmodel.ClassDescription = c.ClassDescription;
-                cmodel.ClassId = c.ClassId;
-                cmodel.ClassName = c.ClassName;
-                cmodel.ClassPrice = c.ClassPrice;
-
-                classList.Add(cmodel);
-            }
-
-            return classList;
-        }
+        
     }
 }
