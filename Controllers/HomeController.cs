@@ -210,7 +210,7 @@ namespace WebSiteCoreProject1.Controllers
 
                 if (user_enrolled_db_result != null)
                 {
-                    ModelState.AddModelError("", "Already enrolled in this class!");
+                    ModelState.AddModelError("", $"You are already enrolled in the {class_db_result.ClassName} class!");
                     EnrollInClassModel enrollModel = EnrollInClassHelper();
                     return View("enrollinclass", enrollModel);
                 }
