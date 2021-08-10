@@ -5,10 +5,9 @@
 @if (@ViewBag.Name != null)
 {
     <form asp-action="Logoff" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right collapse d-sm-inline-flex">
             <li class="nav-item">
-                
-                <a asp-action="manage" title="Manage">Hello @ViewBag.Name</a>
+                Hello @ViewBag.Name
             </li>
             <li class="nav-item">
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
@@ -18,38 +17,11 @@
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right collapse d-sm-inline-flex">
         
-        <li class="nav-item"><a asp-action="register">Register</a></li>
-        <li class="nav-item"><a asp-action="login">Login</a></li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-action="register">Register</a></li>
+        <li class="nav-item">
+            <a a class="nav-link text-dark" asp-action="login">Login</a></li>
     </ul>
 }
-
-
-
-@*@if (Context.Session.GetString("User") != null)
-    {
-        <form asp-action="Logoff" class="navbar-right">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    @{
-                        var user = JsonConvert.DeserializeObject<UserModel>(Context.Session.GetString("User"));
-                    }
-                    <a asp-action="manage" title="Manage">Hello @user.Name</a>
-                </li>
-                <li>
-                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-                </li>
-            </ul>
-        </form>
-    }
-    else
-    {
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <img src="~/images/aspnet-mvc-webstore-shopping-cart-image.png" />
-            </li>
-            <li><a asp-action="register">Register</a></li>
-            <li><a asp-action="login">Login</a></li>
-        </ul>
-    }*@
