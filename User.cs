@@ -13,7 +13,6 @@ namespace WebSiteCoreProject1
         public int UserId { get; set; }
         public string UserEmail { get; set; }
         public virtual string UserPassword { get; set; }
-        //public virtual string UserPassword2 { get; set; }
         public bool UserIsAdmin { get; set; }
 
         public ICollection<UserClass> UserClass { get; set; }

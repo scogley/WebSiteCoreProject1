@@ -39,29 +39,30 @@ namespace WebSiteCoreProject1.Controllers
             return View();
         }
         [HttpPost]
-        //public IActionResult Register(Models.UserAccountViewModel userAccount)
-        public IActionResult Register(Models.UserModelLogin userFormSubmission) 
+
+        public IActionResult Register(Models.UserModelRegister userFormSubmission) 
         {
             if (ModelState.IsValid)
             {
                 var database = new minicstructorContext();
-                database.User.Add(userFormSubmission);
+                // Create a new User instance with the submitted email/password.
+                var user = new User()
+                {
+                    UserEmail = userFormSubmission.UserEmail,
+                    UserPassword = userFormSubmission.UserPassword
+                };
+                database.User.Add(user);
                 database.SaveChanges(); 
                 return View("Login"); // Go to login page.
             }
             else
             {
-                return View(); // return the current view with field validation.
+                return View(); // return the current view with Model enforced field validation.
             }
         }
         [HttpGet]
         public IActionResult Login()
-        {
-            // Check whether a user is logged in and redirect to home page
-            //if (HttpContext.Session.GetString(SessionName) != null)
-            //{
-            //    Response.Redirect("/");
-            //}
+        {   
             return View();
         }
 
