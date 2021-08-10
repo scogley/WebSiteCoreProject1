@@ -67,19 +67,19 @@ namespace WebSiteCoreProject1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Models.UserModelLogin userFormSubmission)
+        public IActionResult Login(Models.UserModelLogin userLoginFormData)
         {            
             if (ModelState.IsValid)
             {
                 var database = new minicstructorContext();
-                foreach (var user in database.User)
+                foreach (var user_db in database.User)
                 {
-                    if (user.UserEmail == userFormSubmission.UserEmail)
+                    if (user_db.UserEmail == userLoginFormData.UserEmail)
                     {
-                        if (user.UserPassword == userFormSubmission.UserPassword)
+                        if (user_db.UserPassword == userLoginFormData.UserPassword)
                         {
-                            HttpContext.Session.SetString(SessionName, user.UserEmail);
-                            HttpContext.Session.SetString(SessionUserId, user.UserId.ToString());
+                            HttpContext.Session.SetString(SessionName, user_db.UserEmail);
+                            HttpContext.Session.SetString(SessionUserId, user_db.UserId.ToString());
                             // TODO: ADD Claim and cookieAuth here
 
                             return Redirect("~/"); // Successful logon redirects to home page
