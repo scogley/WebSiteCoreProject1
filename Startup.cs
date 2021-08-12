@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebSiteCoreProject1
 {
@@ -20,12 +21,17 @@ namespace WebSiteCoreProject1
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        // See Dependency Injection here https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
         public void ConfigureServices(IServiceCollection services)
         {
             #region session provider
             // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
             // Set the in-memory session provider
             services.AddDistributedMemoryCache();
+            // Add Dependency Injection of DbContext.
+            // See https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
+            services.AddDbContext<minicstructorContext>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=mini-cstructor;integrated security=True"));
+
 
             services.AddSession(options =>
             {

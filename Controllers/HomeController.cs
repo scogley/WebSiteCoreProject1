@@ -15,12 +15,14 @@ namespace WebSiteCoreProject1.Controllers
     {
         private const string SessionName = "_Name";
         private const string SessionUserId = "_UserId";
-        
+        private minicstructorContext _database;
+
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, minicstructorContext database)
         {
             _logger = logger;
+            _database = database; // Dependency Injection of the dbcontext.
         }
 
         public IActionResult Index()
@@ -44,15 +46,14 @@ namespace WebSiteCoreProject1.Controllers
         {
             if (ModelState.IsValid)
             {
-                var database = new minicstructorContext();
                 // Create a new User instance with the submitted email/password.
                 var user = new User()
                 {
                     UserEmail = userFormSubmission.UserEmail,
                     UserPassword = userFormSubmission.UserPassword
                 };
-                database.User.Add(user);
-                database.SaveChanges(); 
+                _database.User.Add(user);
+                _database.SaveChanges(); 
                 return View("Login"); // Go to login page.
             }
             else
@@ -71,8 +72,7 @@ namespace WebSiteCoreProject1.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var database = new minicstructorContext();
-                foreach (var user_db in database.User)
+                foreach (var user_db in _database.User)
                 {
                     if (user_db.UserEmail == userLoginFormData.UserEmail)
                     {
@@ -99,10 +99,9 @@ namespace WebSiteCoreProject1.Controllers
 
         private List<ClassModel> GetDbUserClassData(int userId)
         {
-            var database = new minicstructorContext();
 
             // First query userClass for all classId for userId
-            var userClass_db_result = database.UserClass
+            var userClass_db_result = _database.UserClass
                 .Select(uc => new UserClass()
                 {
                     ClassId = uc.ClassId,
@@ -114,7 +113,7 @@ namespace WebSiteCoreProject1.Controllers
             // Then query Class for each classId in results.
             foreach (var res in userClass_db_result)
             {
-                var class_db_result = database.Class
+                var class_db_result = _database.Class
                     .Select(c => new ClassModel()
                     {
                         ClassId = c.ClassId,
@@ -131,15 +130,15 @@ namespace WebSiteCoreProject1.Controllers
 
         public IActionResult ClassList()
         {
-            List<ClassModel> classList = GetDbClassData();
+            List<ClassModel> classList = GetDbClassData(_database);
             return View("classList", classList);
         }
 
-        private static List<ClassModel> GetDbClassData()
+        private static List<ClassModel> GetDbClassData(minicstructorContext db)
         {
-            var database = new minicstructorContext();
+            
             List<ClassModel> classList = new List<ClassModel> { };
-            foreach (var c in database.Class)
+            foreach (var c in db.Class)
             {
                 var cmodel = new ClassModel();
                 cmodel.ClassDescription = c.ClassDescription;
@@ -163,18 +162,17 @@ namespace WebSiteCoreProject1.Controllers
             }
             ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
 
-            EnrollInClassModel enrollModel = EnrollInClassHelper();
+            EnrollInClassModel enrollModel = EnrollInClassHelper(_database);
 
             return View("enrollinclass", enrollModel);
         }
 
-        private static EnrollInClassModel EnrollInClassHelper()
+        private static EnrollInClassModel EnrollInClassHelper(minicstructorContext db)
         {
             EnrollInClassModel enrollModel = new EnrollInClassModel();
 
-            var database = new minicstructorContext();
             // This works for setting ClassId in dropdown!
-            foreach (var c in database.Class)
+            foreach (var c in db.Class)
             {
                 enrollModel.ClassNameSelItemList.Add(
                     new SelectListItem { Text = c.ClassName, Value = c.ClassId.ToString() });
@@ -191,27 +189,26 @@ namespace WebSiteCoreProject1.Controllers
             // See this page for useful info implementing dropdown https://stackoverflow.com/questions/34624034/select-tag-helper-in-asp-net-core-mvc
             if (ModelState.IsValid)
             {
-                var database = new minicstructorContext();
-
+                
                 // need to get the ClassId and the UserId to modify UserClass table
                 // Get the current session user id and query db table for the
                 
 
                 // Get the user from db by looking up the logged in userId stored in Session variable.
-                var user_db_result = database.User
+                var user_db_result = _database.User
                     .Find(int.Parse(HttpContext.Session.GetString(SessionUserId)));
 
-                var class_db_result = database.Class
+                var class_db_result = _database.Class
                     .Find(enrollClassForm.ClassId);
 
                 // Check if the user has already enrolled in this class
-                var user_enrolled_db_result = database.UserClass
+                var user_enrolled_db_result = _database.UserClass
                     .Find(enrollClassForm.ClassId, int.Parse(HttpContext.Session.GetString(SessionUserId)));
 
                 if (user_enrolled_db_result != null)
                 {
                     ModelState.AddModelError("", $"You are already enrolled in the {class_db_result.ClassName} class!");
-                    EnrollInClassModel enrollModel = EnrollInClassHelper();
+                    EnrollInClassModel enrollModel = EnrollInClassHelper(_database);
                     return View("enrollinclass", enrollModel);
                 }
 
@@ -221,8 +218,8 @@ namespace WebSiteCoreProject1.Controllers
                     ClassId = class_db_result.ClassId,
                     UserId = user_db_result.UserId,
                 };
-                database.UserClass.Add(userClassTable);
-                database.SaveChanges();
+                _database.UserClass.Add(userClassTable);
+                _database.SaveChanges();
                 return Redirect("~/Home/studentclasses"); // Go to list of enrolled classes page.
             }
             else
