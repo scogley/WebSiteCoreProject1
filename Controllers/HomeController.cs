@@ -62,7 +62,7 @@ namespace WebSiteCoreProject1.Controllers
                 // Create a new User instance with the submitted email/password.
                 var user = new User()
                 {
-                    UserEmail = userFormSubmission.UserEmail,
+                    UserEmail = userFormSubmission.UserEmail.ToLower(),
                     UserPassword = userFormSubmission.UserPassword
                 };
                 _database.User.Add(user);
