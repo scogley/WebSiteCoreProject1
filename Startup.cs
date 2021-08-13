@@ -24,15 +24,10 @@ namespace WebSiteCoreProject1
         // See Dependency Injection here https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
         public void ConfigureServices(IServiceCollection services)
         {
-            #region session provider
+            #region Session Provider
             // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
             // Set the in-memory session provider
             services.AddDistributedMemoryCache();
-            // Add Dependency Injection of DbContext.
-            // See https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
-            services.AddDbContext<minicstructorContext>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=mini-cstructor;integrated security=True"));
-
-
             services.AddSession(options =>
             {
                 //options.IdleTimeout = TimeSpan.FromSeconds(10);
@@ -41,6 +36,13 @@ namespace WebSiteCoreProject1
             });
             #endregion
 
+            #region Dependency Injection
+            // Add Dependency Injection of DbContext.
+            // See https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
+            // Connection string stored in appsettings.json see http://go.microsoft.com/fwlink/?LinkId=723263
+            services.AddDbContext<minicstructorContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings:DefaultConnection")));
+            #endregion
             services.AddControllersWithViews();
         }
 
