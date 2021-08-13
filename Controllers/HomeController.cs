@@ -121,6 +121,15 @@ namespace WebSiteCoreProject1.Controllers
                 authProperties).Wait();
         }
 
+        public IActionResult LogOff()
+        {
+            HttpContext.Session.Remove(SessionName);
+            HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Redirect("/Home/Login");
+        }
+
         public IActionResult StudentClasses()
         {
             List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));

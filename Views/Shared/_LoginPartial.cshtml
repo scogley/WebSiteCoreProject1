@@ -2,12 +2,13 @@
 @using Newtonsoft.Json;
 
 
-@if (@ViewBag.Name != null)
+@*@if (@ViewBag.Name != null)*@
+@if (Context.Session.GetString("_Name") != null)
 {
     <form asp-action="Logoff" class="navbar-right">
         <ul class="nav navbar-nav navbar-right collapse d-sm-inline-flex">
             <li class="nav-item">
-                Hello @ViewBag.Name
+                Hello @Context.Session.GetString("_Name")
             </li>
             <li class="nav-item">
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
