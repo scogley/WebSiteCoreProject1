@@ -22,7 +22,7 @@ namespace WebSiteCoreProject1.Controllers
         public HomeController(ILogger<HomeController> logger, minicstructorContext database)
         {
             _logger = logger;
-            _database = database; // Dependency Injection of the dbcontext.
+            _database = database; // Dependency Injection of the dbcontext using constructor injection.
         }
 
         public IActionResult Index()
