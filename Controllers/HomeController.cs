@@ -50,6 +50,15 @@ namespace WebSiteCoreProject1.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if user already exists
+                var userCheck = _database.User
+                    .FirstOrDefault(u => u.UserEmail == userFormSubmission.UserEmail.ToLower());
+                if (userCheck != null)
+                {
+                    ModelState.AddModelError("", $"The Username {userFormSubmission.UserEmail} already exists! Please use a different user name.");
+                    return View();
+                }
+                
                 // Create a new User instance with the submitted email/password.
                 var user = new User()
                 {
@@ -57,7 +66,7 @@ namespace WebSiteCoreProject1.Controllers
                     UserPassword = userFormSubmission.UserPassword
                 };
                 _database.User.Add(user);
-                _database.SaveChanges(); 
+                _database.SaveChanges();
                 return View("Login"); // Go to login page.
             }
             else
