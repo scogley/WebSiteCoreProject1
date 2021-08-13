@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebSiteCoreProject1
 {
@@ -34,6 +36,15 @@ namespace WebSiteCoreProject1
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            #endregion
+
+            #region Authentication
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+               {
+                   options.LoginPath = new PathString("/Home/Login");
+                   options.AccessDeniedPath = new PathString("/Account/Denied");
+               });
             #endregion
 
             #region Dependency Injection

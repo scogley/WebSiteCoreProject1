@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using WebSiteCoreProject1.Models;
 using Microsoft.AspNetCore.Http; // used for sessions
 using Microsoft.AspNetCore.Mvc.Rendering; // For SelectListItem
+// used for authentication
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebSiteCoreProject1.Controllers
 {
@@ -69,26 +73,52 @@ namespace WebSiteCoreProject1.Controllers
 
         [HttpPost]
         public IActionResult Login(Models.UserModelLogin userLoginFormData)
-        {            
-            if (ModelState.IsValid)
+        {
+            if (!ModelState.IsValid) return View();
+            
+            foreach (var user_db in _database.User)
             {
-                foreach (var user_db in _database.User)
-                {
-                    if (user_db.UserEmail.ToLower() == userLoginFormData.UserEmail.ToLower())
-                    {
-                        if (user_db.UserPassword == userLoginFormData.UserPassword)
-                        {
-                            HttpContext.Session.SetString(SessionName, user_db.UserEmail);
-                            HttpContext.Session.SetString(SessionUserId, user_db.UserId.ToString());
-                            // TODO: ADD Claim and cookieAuth here
-
-                            return Redirect("~/"); // Successful logon redirects to home page
-                        }
-                    }
+                if (user_db.UserEmail.ToLower() == userLoginFormData.UserEmail.ToLower()
+                    && user_db.UserPassword == userLoginFormData.UserPassword)
+                {   
+                    LogonUser(user_db);
+                    // Successful logon redirects to home page.
+                    return Redirect("~/");
                 }
-                return View();
             }
+            // No match for user submitted user/pass was found in db.
             return View();
+        }
+
+        private void LogonUser(User user_db)
+        {
+            HttpContext.Session.SetString(SessionName, user_db.UserEmail);
+            HttpContext.Session.SetString(SessionUserId, user_db.UserId.ToString());
+            // Add Claim and cookieAuth here
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user_db.UserEmail),
+                new Claim(ClaimTypes.Role, "User"),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = false,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false,
+                IssuedUtc = DateTimeOffset.UtcNow,
+            };
+
+            HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                claimsPrincipal,
+                authProperties).Wait();
         }
 
         public IActionResult StudentClasses()
