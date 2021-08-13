@@ -42,7 +42,7 @@ namespace WebSiteCoreProject1
             // Also https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/#dbcontext-in-dependency-injection-for-aspnet-core
             // Connection string stored in appsettings.json see http://go.microsoft.com/fwlink/?LinkId=723263
             services.AddDbContext<minicstructorContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings:DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
             services.AddControllersWithViews();
         }

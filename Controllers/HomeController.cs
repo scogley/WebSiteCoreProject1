@@ -74,7 +74,7 @@ namespace WebSiteCoreProject1.Controllers
             {
                 foreach (var user_db in _database.User)
                 {
-                    if (user_db.UserEmail == userLoginFormData.UserEmail)
+                    if (user_db.UserEmail.ToLower() == userLoginFormData.UserEmail.ToLower())
                     {
                         if (user_db.UserPassword == userLoginFormData.UserPassword)
                         {
