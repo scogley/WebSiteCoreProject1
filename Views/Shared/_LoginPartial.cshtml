@@ -2,7 +2,6 @@
 @using Newtonsoft.Json;
 
 
-@*@if (@ViewBag.Name != null)*@
 @if (Context.Session.GetString("_Name") != null)
 {
     <form asp-action="Logoff" class="navbar-right">
