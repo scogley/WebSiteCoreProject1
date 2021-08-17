@@ -73,7 +73,8 @@ namespace WebSiteCoreProject1
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // The order of the middleware is important. Call UseAuthentication before UseAuthorization
+            app.UseAuthorization(); // See https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio#configure-identity-services
 
             // The order of middleware is important. Call UseSession after UseRouting and before UseEndpoints. 
             // See Middleware Ordering https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-5.0#order

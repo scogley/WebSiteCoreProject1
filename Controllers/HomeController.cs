@@ -6,12 +6,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebSiteCoreProject1.Models;
-using Microsoft.AspNetCore.Http; // used for sessions
+using Microsoft.AspNetCore.Http; // For sessions
 using Microsoft.AspNetCore.Mvc.Rendering; // For SelectListItem
 // used for authentication
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization; // For authorization
 
 namespace WebSiteCoreProject1.Controllers
 {
@@ -29,14 +30,9 @@ namespace WebSiteCoreProject1.Controllers
             _database = database; // Dependency Injection of the dbcontext using constructor injection.
         }
 
+        
         public IActionResult Index()
         {
-            // Check whether a user is logged in and redirect to login page if not.
-            if (HttpContext.Session.GetString(SessionName) == null )
-            {
-                Response.Redirect("/Home/Login");
-            }
-            ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
             return View();
         }
         [HttpGet]
@@ -139,6 +135,7 @@ namespace WebSiteCoreProject1.Controllers
             return Redirect("/Home/Login");
         }
 
+        [Authorize]
         public IActionResult StudentClasses()
         {
             List<ClassModel> classList = GetDbUserClassData(int.Parse(HttpContext.Session.GetString(SessionUserId)));
@@ -200,16 +197,10 @@ namespace WebSiteCoreProject1.Controllers
             return classList;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult EnrollInClass()
         {
-            // Check whether a user is logged in and redirect to login page if not.
-            if (HttpContext.Session.GetString(SessionName) == null)
-            {
-                Response.Redirect("/Home/Login");
-            }
-            ViewBag.Name = HttpContext.Session.GetString(SessionName); // store in ViewBag to access User from View.
-
             EnrollInClassModel enrollModel = EnrollInClassHelper(_database);
 
             return View("enrollinclass", enrollModel);
@@ -237,11 +228,6 @@ namespace WebSiteCoreProject1.Controllers
             // See this page for useful info implementing dropdown https://stackoverflow.com/questions/34624034/select-tag-helper-in-asp-net-core-mvc
             if (ModelState.IsValid)
             {
-                
-                // need to get the ClassId and the UserId to modify UserClass table
-                // Get the current session user id and query db table for the
-                
-
                 // Get the user from db by looking up the logged in userId stored in Session variable.
                 var user_db_result = _database.User
                     .Find(int.Parse(HttpContext.Session.GetString(SessionUserId)));
@@ -276,17 +262,10 @@ namespace WebSiteCoreProject1.Controllers
             }
         }
 
-        
-
-        
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-        
     }
 }
