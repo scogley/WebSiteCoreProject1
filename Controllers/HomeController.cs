@@ -30,18 +30,18 @@ namespace WebSiteCoreProject1.Controllers
             _database = database; // Dependency Injection of the dbcontext using constructor injection.
         }
 
-        
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
-        [HttpPost]
 
+        [HttpPost]
         public IActionResult Register(Models.UserModelRegister userFormSubmission) 
         {
             if (ModelState.IsValid)
@@ -54,12 +54,14 @@ namespace WebSiteCoreProject1.Controllers
                     ModelState.AddModelError("", $"The Username {userFormSubmission.UserEmail} already exists! Please use a different user name.");
                     return View();
                 }
-                
+
+                PasswordHasher hashpass = new PasswordHasher(userFormSubmission.UserPassword);
+
                 // Create a new User instance with the submitted email/password.
                 var user = new User()
                 {
                     UserEmail = userFormSubmission.UserEmail.ToLower(),
-                    UserPassword = userFormSubmission.UserPassword
+                    UserPassword = hashpass.HashedPassword
                 };
                 _database.User.Add(user);
                 _database.SaveChanges();
@@ -70,6 +72,7 @@ namespace WebSiteCoreProject1.Controllers
                 return View(); // return the current view with Model enforced field validation.
             }
         }
+
         [HttpGet]
         public IActionResult Login()
         {   
@@ -224,7 +227,6 @@ namespace WebSiteCoreProject1.Controllers
         [HttpPost]
         public IActionResult EnrollInClass(Models.EnrollInClassModel enrollClassForm)
         {
-            // enrollClassForm has ClassId property set!
             // See this page for useful info implementing dropdown https://stackoverflow.com/questions/34624034/select-tag-helper-in-asp-net-core-mvc
             if (ModelState.IsValid)
             {
