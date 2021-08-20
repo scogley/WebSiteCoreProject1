@@ -86,8 +86,15 @@ namespace WebSiteCoreProject1.Controllers
             
             foreach (var user_db in _database.User)
             {
-                if (user_db.UserEmail.ToLower() == userLoginFormData.UserEmail.ToLower()
-                    && user_db.UserPassword == userLoginFormData.UserPassword)
+                if (user_db.UserEmail.ToLower() != userLoginFormData.UserEmail.ToLower())
+                {
+                    // No match for Email found skip to next iteration.
+                    continue;
+                }
+                
+                PasswordHasher hashpassForm = new PasswordHasher(userLoginFormData.UserPassword);
+
+                if (user_db.UserPassword == hashpassForm.HashedPassword)
                 {   
                     LogonUser(user_db);
                     // Successful logon redirects to home page.
