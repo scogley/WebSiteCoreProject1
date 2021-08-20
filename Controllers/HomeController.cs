@@ -61,7 +61,8 @@ namespace WebSiteCoreProject1.Controllers
                 var user = new User()
                 {
                     UserEmail = userFormSubmission.UserEmail.ToLower(),
-                    UserPassword = hashpass.HashedPassword
+                    UserPassword = hashpass.HashedPassword,
+                    UserSalt = hashpass.Salt
                 };
                 _database.User.Add(user);
                 _database.SaveChanges();

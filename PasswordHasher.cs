@@ -10,6 +10,7 @@ namespace WebSiteCoreProject1
     public class PasswordHasher : IPasswordHasher
     {
         public string HashedPassword { get; }
+        public string Salt { get; private set; }
 
         public PasswordHasher(string password)
         {
@@ -33,7 +34,20 @@ namespace WebSiteCoreProject1
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
 
+            // Loop through each byte in the array and format each as hexadecimal string.
+            string saltString = "";
+            foreach (byte b in salt)
+            {
+                saltString += b.ToString() + "x2";
+            }
+            Salt = saltString;
+
             return hashed;
+        }
+
+        public bool VerifyPassword(string password, string correctHash)
+        {
+            return false;
         }
     }
 

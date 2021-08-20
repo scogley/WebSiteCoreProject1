@@ -47,6 +47,17 @@ namespace WebSiteCoreProject1
                });
             #endregion
 
+            #region Setup Entity Framework
+            // 1. Install Entity Framework Core Tools
+            // Install-Package Microsoft.EntityFrameworkCore.Tools -Version 2.1.2
+            // 2. Install the SQL Server Provider
+            // Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 2.1.2
+            // 3. Create the Database Model
+            // Scaffold-DbContext 'Data Source=.\SQLEXPRESS;Initial Catalog=mini-cstructor;integrated security=True' Microsoft.EntityFrameworkCore.SqlServer
+            // 4. (optional) Re-Create the Database Model (if DB has changed)
+            // Scaffold-DbContext 'Data Source=.\SQLEXPRESS;Initial Catalog=mini-cstructor;integrated security=True' Microsoft.EntityFrameworkCore.SqlServer -Force
+            #endregion
+
             #region Dependency Injection
             // Add Dependency Injection of DbContext.
             // See https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/dependency-injection?view=aspnetcore-2.2
