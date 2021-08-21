@@ -93,9 +93,12 @@ namespace WebSiteCoreProject1.Controllers
                     continue;
                 }
                 
-                PasswordHasher hashpassForm = new PasswordHasher(userLoginFormData.UserPassword);
-
-                if (user_db.UserPassword == hashpassForm.HashedPassword)
+                PasswordHasher hashpassForm = new PasswordHasher(
+                    userLoginFormData.UserPassword,
+                    user_db.UserPassword,
+                    user_db.UserSalt);
+                if(hashpassForm.IsHashMatch)
+                //if (user_db.UserPassword == hashpassForm.HashedPassword)
                 {   
                     LogonUser(user_db);
                     // Successful logon redirects to home page.

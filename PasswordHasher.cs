@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Text;
+// See https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/consumer-apis/password-hashing?view=aspnetcore-5.0
 
 namespace WebSiteCoreProject1
 {
@@ -12,9 +14,17 @@ namespace WebSiteCoreProject1
         public string HashedPassword { get; }
         public string Salt { get; private set; }
 
-        public PasswordHasher(string password)
+        public bool IsHashMatch { get; private set; }
+
+        
+        public PasswordHasher(string clearTextPass)
         {
-            HashedPassword = this.HashPassword(password);
+            HashedPassword = this.HashPassword(clearTextPass);
+        }
+
+        public PasswordHasher(string clearTextPass, string correctHash, string salt)
+        {
+            this.VerifyPassword(clearTextPass, correctHash, salt);
         }
 
         private string HashPassword(string password)
@@ -25,7 +35,14 @@ namespace WebSiteCoreProject1
             {
                 rngCsp.GetNonZeroBytes(salt);
             }
+            string hashed = CreateHash(password, salt);
+            Salt = Convert.ToBase64String(salt);
 
+            return hashed;
+        }
+
+        private static string CreateHash(string password, byte[] salt)
+        {
             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
@@ -33,23 +50,16 @@ namespace WebSiteCoreProject1
                 prf: KeyDerivationPrf.HMACSHA256,
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
-
-            // Loop through each byte in the array and format each as hexadecimal string.
-            string saltString = "";
-            foreach (byte b in salt)
-            {
-                saltString += b.ToString() + "x2";
-            }
-            Salt = saltString;
-
             return hashed;
         }
 
-        public bool VerifyPassword(string password, string correctHash)
+        public void VerifyPassword(string clearTextPass, string correctHash, string salt)
         {
-            return false;
+            // Convert the salt string to a byte array and run the hashing algorithm
+            // Compare correctHash with result and return bool
+            byte[] saltByteArray = Convert.FromBase64String(salt);
+            string hashed = CreateHash(clearTextPass, saltByteArray);
+            IsHashMatch = hashed == correctHash;
         }
     }
-
-
 }
